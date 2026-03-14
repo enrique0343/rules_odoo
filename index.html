@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Levantamiento de Roles ERP — Avante</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;color:#1a1a1a;background:#f0f2f5;min-height:100vh;padding:1.5rem 1rem}
+.wrap{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,0.08);max-width:700px;margin:0 auto;padding:2rem}
+.header{text-align:center;margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid #eee}
+.logo{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#aaa;margin-bottom:5px}
+.title{font-size:20px;font-weight:700;color:#1e3a5f;margin-bottom:3px}
+.sub{font-size:13px;color:#999}
+input,select,textarea{width:100%;padding:9px 12px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;color:#1a1a1a;font-size:14px;font-family:inherit;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+textarea{resize:vertical}
+button{cursor:pointer;padding:8px 20px;border:1.5px solid #ddd;border-radius:8px;background:#fff;color:#333;font-size:14px;font-family:inherit;transition:all .15s}
+button:hover:not(:disabled){background:#f5f5f5}
+button:disabled{opacity:.4;cursor:not-allowed}
+.bp{background:#1e3a5f;color:#fff;border-color:#1e3a5f}
+.bp:hover:not(:disabled){background:#16304f}
+.lbl{display:block;font-size:13px;color:#666;margin-bottom:5px;font-weight:500}
+.f{margin-bottom:16px}
+.setup-box{background:#fffbeb;border:1.5px solid #fbbf24;border-radius:10px;padding:14px 16px;margin-bottom:1.5rem}
+.step-bar{display:flex;align-items:flex-start;margin-bottom:1.75rem}
+.step-conn{flex:1;height:2px;margin-top:13px}
+.step-circ{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.step-lbl{font-size:11px;margin-top:4px;white-space:nowrap}
+.ger-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.ger-btn{padding:6px 13px;font-size:13px;font-weight:600;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;color:#777;cursor:pointer;transition:all .15s}
+.acc-btn{width:37px;height:29px;padding:0;font-size:12px;font-weight:700;border-radius:6px;border:1.5px solid #e0e0e0;background:#fff;color:#aaa;cursor:pointer;transition:all .15s}
+.mod-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5}
+.mod-name{flex:1;font-size:13px}
+.badge{font-size:11px;padding:1px 7px;border-radius:4px;font-weight:700;margin-left:4px}
+.acc-grp{display:flex;gap:3px}
+.grp-title{font-size:11px;font-weight:700;color:#aaa;margin:16px 0 5px;padding-bottom:4px;border-bottom:1px solid #eee;text-transform:uppercase;letter-spacing:.5px}
+.user-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#f9f9f9;border-radius:8px;margin-bottom:6px;border:1px solid #f0f0f0}
+.avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.add-box{background:#f9f9f9;border-radius:10px;padding:14px;margin:1rem 0 1.5rem;border:1px solid #eee}
+.add-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.legend{display:flex;gap:5px;flex-wrap:wrap;padding:9px 12px;background:#f9f9f9;border-radius:8px;margin-bottom:1rem;border:1px solid #f0f0f0}
+.legend-item{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:700}
+.prog-meta{display:flex;justify-content:space-between;font-size:12px;color:#999;margin-bottom:4px}
+.prog-track{height:5px;background:#eee;border-radius:3px}
+.prog-fill{height:5px;border-radius:3px;background:#2563eb;transition:width .25s}
+.sum-card{background:#f5f7fa;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem;border:1px solid #eee}
+.ger-pill{font-size:12px;padding:3px 12px;border-radius:20px;font-weight:700}
+.empty{font-size:13px;color:#bbb;text-align:center;padding:18px;border:1.5px dashed #e5e7eb;border-radius:8px}
+.nav{display:flex;justify-content:space-between;margin-top:1.5rem;padding-top:1rem;border-top:1px solid #eee}
+.success{text-align:center;padding:2.5rem 1rem}
+.err-box{background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:12px 14px;margin-bottom:1rem;font-size:13px;color:#991b1b}
+@media(max-width:500px){.add-grid{grid-template-columns:1fr}.step-lbl{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo">Avante Complejo Hospitalario</div>
+    <div class="title">Levantamiento de Roles ERP</div>
+    <div class="sub">Defina los accesos de su cargo en el sistema Odoo</div>
+  </div>
+  <div id="app"></div>
+</div>
+
+<script>
+// ─── CONFIGURACIÓN ────────────────────────────────────────────────────────
+// Pega aquí la URL de tu Google Apps Script Web App después de desplegarlo
+const GAS_URL = "";  // ← ej: "https://script.google.com/macros/s/XXXXX/exec"
+// ─────────────────────────────────────────────────────────────────────────
+
+const GD={
+  "Legal":          {bg:"#ede9fe",color:"#4c1d95",cargos:["Gerente Legal","Asistente Legal"]},
+  "Financiero":     {bg:"#dcfce7",color:"#166534",cargos:["Gerente Financiero","Contador General","Auxiliar Contable","Tesorero","Analista Financiero","Asistente de Caja","Asistente de Honorarios"]},
+  "Comercial":      {bg:"#fef9c3",color:"#854d0e",cargos:["Gerente Comercial","Ejecutivo de Ventas","Analista Comercial","Recepcionista","Asistente Comercial","Atención al Cliente","Dependiente de Farmacia","Supervisor de Farmacia"]},
+  "Talento Humano": {bg:"#fce7f3",color:"#9d174d",cargos:["Gerente de Talento Humano","Coordinador de RRHH","Analista de Nómina","Reclutador","Asistente de RRHH"]},
+  "Operaciones":    {bg:"#dbeafe",color:"#1e3a5f",cargos:["Gerente de Operaciones","Jefe de Logística Hospitalaria","Coordinador de Operaciones","Encargado de Almacén","Encargado de Cocina","Auxiliar de Bodega","Dependiente Botiquín","Auxiliar Botiquín"]},
+  "Mercadeo":       {bg:"#ffedd5",color:"#9a3412",cargos:["Gerente de Mercadeo","Diseñador Gráfico","Community Manager","Analista de Marketing","Asistente de Mercadeo"]},
+  "Médica":         {bg:"#d1fae5",color:"#065f46",cargos:["Médico Numerario","Médico Residente","Enfermera Jefe","Enfermera Numeraria","Técnico de Laboratorio","Técnico de Radiología"]},
+};
+const ACC=[
+  {code:"C",label:"Completo",  bg:"#dcfce7",color:"#166534"},
+  {code:"L",label:"Lectura",   bg:"#fef9c3",color:"#854d0e"},
+  {code:"P",label:"Parcial",   bg:"#ffedd5",color:"#9a3412"},
+  {code:"A",label:"Aprobación",bg:"#dbeafe",color:"#1e3a5f"},
+  {code:"X",label:"Sin acceso",bg:"#fee2e2",color:"#991b1b"},
+];
+const GROUPS=[
+  {name:"Clínico / Asistencial",     mods:["Paciente","Profesional","Creación de Médicos","Appointment","Prescription","Cirugía","Hospitalización","Reserva SOP","Tratamientos","Medicinas"]},
+  {name:"Farmacia / Diagnóstico",     mods:["Farmacia","Requisicion Botiquin","Laboratorio","Radiología"]},
+  {name:"Ventas / Comercial",         mods:["Ventas","Punto de venta","Cotizador","Facturación","Commissions","Seguro","Aseguradoras"]},
+  {name:"Caja / Finanzas",           mods:["Cierre de caja","Aperturar Caja"]},
+  {name:"Compras / Inventario",       mods:["Compras","Compras Hospital","Inventario","Requisiciones internas"]},
+  {name:"Operaciones / Servicios",    mods:["Servicios","Mantenimiento","Facility","Parqueo","Flota","Manufactura"]},
+  {name:"RRHH / Personal",           mods:["Empleados","Asistencias","Tiempo personal","Hojas de horas"]},
+  {name:"Gestión / Proyectos",        mods:["Proyecto","Agenda","Calendario","Actividades pendientes","Tableros","Mi Tablero"]},
+  {name:"Comunicación / Documentos",  mods:["Conversaciones","Consignas","Documents","Sitio web","eLearning","Encuestas","Encuestas de Hospitalización"]},
+  {name:"Administración del Sistema", mods:["Ajustes","Aplicaciones","Access Rights manager","SGH","Membretes","Contactos"]},
+];
+const ALL_MODS=GROUPS.flatMap(g=>g.mods);
+const defP=()=>{const p={};ALL_MODS.forEach(m=>p[m]="X");return p;};
+
+let S={step:1,gerencia:"",cargo:"",cargoCustom:"",obs:"",usuarios:[],permisos:defP(),saving:false,saved:false,error:""};
+const getCargo=()=>S.cargo==="__otro__"?S.cargoCustom:S.cargo;
+const nonX=()=>Object.values(S.permisos).filter(v=>v!=="X").length;
+const $=id=>document.getElementById(id);
+const app=()=>$("app");
+
+function stepBar(cur){
+  const steps=["Identificación","Usuarios","Permisos","Confirmar"];
+  let h=`<div class="step-bar">`;
+  steps.forEach((s,i)=>{
+    const n=i+1,active=n===cur,done=n<cur;
+    if(i>0)h+=`<div class="step-conn" style="background:${done?"#2563eb":"#e5e7eb"}"></div>`;
+    h+=`<div style="display:flex;flex-direction:column;align-items:center">
+      <div class="step-circ" style="border:1.5px solid ${active?"#1e3a5f":done?"#2563eb":"#ddd"};background:${active?"#1e3a5f":done?"#2563eb":"#f9f9f9"};color:${active||done?"#fff":"#bbb"}">${done?"✓":n}</div>
+      <div class="step-lbl" style="color:${active?"#1e3a5f":"#aaa"};font-weight:${active?700:400}">${s}</div>
+    </div>`;
+  });
+  return h+`</div>`;
+}
+
+function render(){
+  if(!app())return;
+  if(S.saved){renderSaved();return;}
+  if(!GAS_URL){renderSetup();return;}
+  [r1,r2,r3,r4][S.step-1]();
+}
+
+function renderSetup(){
+  app().innerHTML=`
+    <div class="setup-box">
+      <div style="font-size:14px;font-weight:700;color:#92400e;margin-bottom:8px">⚙️ Configuración requerida</div>
+      <div style="font-size:13px;color:#78350f;line-height:1.6;margin-bottom:10px">
+        Para que la webapp funcione, necesitas pegar la URL del Google Apps Script Web App en el código.<br>
+        Sigue los pasos de instalación en el archivo README incluido.
+      </div>
+    </div>
+    <div style="font-size:14px;color:#555;line-height:1.8">
+      <strong>Pasos rápidos:</strong><br>
+      1. Abre Google Apps Script (script.google.com)<br>
+      2. Pega el código del Script 1 (Receptor)<br>
+      3. Despliega como Web App → Cualquiera puede acceder<br>
+      4. Copia la URL generada<br>
+      5. Pégala en <code style="background:#f3f4f6;padding:1px 6px;border-radius:4px">GAS_URL</code> de este archivo HTML
+    </div>`;
+}
+
+function renderSaved(){
+  const gc=GD[S.gerencia];
+  app().innerHTML=`<div class="success">
+    <div style="width:60px;height:60px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:28px;color:#166534">✓</div>
+    <div style="font-size:19px;font-weight:700;margin-bottom:8px;color:#166534">¡Rol guardado en Google Sheets!</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px">${getCargo()}</div>
+    <span class="ger-pill" style="background:${gc.bg};color:${gc.color}">Gerencia ${S.gerencia}</span>
+    <div style="font-size:13px;color:#555;margin:16px auto;max-width:400px;padding:10px 16px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;line-height:1.6">
+      Los datos quedaron registrados en la hoja <strong>Roles ERP</strong>. Cuando estén todos los roles, ejecuta el Script 2 para generar los PDFs.
+    </div>
+    <button class="bp" id="btn-reset">+ Registrar otro rol</button>
+  </div>`;
+  $("btn-reset").onclick=()=>{S={step:1,gerencia:"",cargo:"",cargoCustom:"",obs:"",usuarios:[],permisos:defP(),saving:false,saved:false,error:""};render();};
+}
+
+function r1(){
+  const gc=S.gerencia?GD[S.gerencia]:null;
+  const esOtro=S.cargo==="__otro__";
+  const cargos=gc?gc.cargos:[];
+  const opts=cargos.length
+    ?`<option value="">Selecciona un cargo...</option>${cargos.map(c=>`<option value="${c}"${S.cargo===c?" selected":""}>${c}</option>`).join("")}<option value="__otro__"${esOtro?" selected":""}>Otro (especificar)</option>`
+    :`<option value="">Selecciona primero una gerencia</option>`;
+  const ok=S.gerencia&&S.cargo&&(!esOtro||S.cargoCustom.trim());
+  const gerBtns=Object.entries(GD).map(([g,d])=>{
+    const sel=S.gerencia===g;
+    return `<button class="ger-btn" data-g="${g}" style="${sel?`background:${d.bg};color:${d.color};border-color:${d.color}`:""}">${g}</button>`;
+  }).join("");
+  app().innerHTML=`${stepBar(1)}
+    <div class="f"><label class="lbl">Gerencia</label><div class="ger-wrap">${gerBtns}</div></div>
+    <div class="f"><label class="lbl">Cargo</label><select id="sel-c">${opts}</select></div>
+    <div id="wrap-otro" style="display:${esOtro?"block":"none"}" class="f">
+      <label class="lbl">Especifica el cargo</label><input id="inp-otro" value="${S.cargoCustom}" placeholder="Nombre del cargo">
+    </div>
+    <div class="f"><label class="lbl">Observaciones (opcional)</label>
+      <textarea id="inp-obs" rows="2" placeholder="Ej. Acceso solo en horario laboral.">${S.obs}</textarea></div>
+    <div class="nav"><span></span><button id="btn-c1" class="bp" ${!ok?"disabled":""}>Continuar →</button></div>`;
+  document.querySelectorAll(".ger-btn").forEach(b=>b.addEventListener("click",()=>{S.gerencia=b.dataset.g;S.cargo="";S.cargoCustom="";render();}));
+  $("sel-c").addEventListener("change",function(){
+    S.cargo=this.value;if(this.value!=="__otro__")S.cargoCustom="";
+    const w=$("wrap-otro");if(w)w.style.display=this.value==="__otro__"?"block":"none";
+    const b=$("btn-c1");if(b)b.disabled=!(S.gerencia&&this.value&&(this.value!=="__otro__"||S.cargoCustom.trim()));
+  });
+  $("inp-otro")?.addEventListener("input",function(){S.cargoCustom=this.value;const b=$("btn-c1");if(b)b.disabled=!(S.gerencia&&S.cargo&&this.value.trim());});
+  $("inp-obs").addEventListener("input",function(){S.obs=this.value;});
+  $("btn-c1").addEventListener("click",()=>{
+    const o=$("inp-obs");if(o)S.obs=o.value;
+    const c=$("inp-otro");if(c)S.cargoCustom=c.value;
+    S.step=2;render();
+  });
+}
+
+function r2(){
+  const gc=GD[S.gerencia];
+  const list=S.usuarios.length?S.usuarios.map((u,i)=>`
+    <div class="user-item">
+      <div class="avatar" style="background:${gc.bg};color:${gc.color}">${u.nombre[0].toUpperCase()}</div>
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">${u.nombre}</div><div style="font-size:12px;color:#999">${u.correo}</div></div>
+      <button data-i="${i}" class="del-u" style="padding:4px 10px;font-size:12px;color:#aaa">✕</button>
+    </div>`).join("")
+  :`<div class="empty">Sin usuarios agregados aún</div>`;
+  app().innerHTML=`${stepBar(2)}
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem">
+      <strong style="font-size:15px">Usuarios a intervenir</strong>
+      <span class="ger-pill" style="background:${gc.bg};color:${gc.color}">${getCargo()}</span>
+    </div>
+    <div>${list}</div>
+    <div class="add-box">
+      <div style="font-size:13px;font-weight:600;color:#666;margin-bottom:10px">Agregar usuario</div>
+      <div class="add-grid">
+        <div><label class="lbl">Nombre completo</label><input id="inp-un" placeholder="Ej. Ana Martínez"></div>
+        <div><label class="lbl">Correo electrónico</label><input id="inp-ue" type="email" placeholder="ana@avante.com.sv"></div>
+      </div>
+      <button id="btn-add" class="bp" style="width:100%" disabled>+ Agregar usuario</button>
+    </div>
+    <div class="nav">
+      <button id="btn-b2">← Atrás</button>
+      <button id="btn-n2" class="bp">Continuar →${S.usuarios.length?" ("+S.usuarios.length+"u)":""}</button>
+    </div>`;
+  const chk=()=>{const n=$("inp-un").value.trim(),e=$("inp-ue").value.trim();$("btn-add").disabled=!(n&&e&&e.includes("@"));};
+  $("inp-un").addEventListener("input",chk);$("inp-ue").addEventListener("input",chk);
+  $("btn-add").addEventListener("click",()=>{
+    const n=$("inp-un").value.trim(),e=$("inp-ue").value.trim();
+    if(!n||!e)return;S.usuarios.push({nombre:n,correo:e});S.step=2;render();
+  });
+  document.querySelectorAll(".del-u").forEach(b=>b.addEventListener("click",()=>{S.usuarios.splice(parseInt(b.dataset.i),1);S.step=2;render();}));
+  $("btn-b2").addEventListener("click",()=>{S.step=1;render();});
+  $("btn-n2").addEventListener("click",()=>{S.step=3;render();});
+}
+
+function r3(){
+  const gc=GD[S.gerencia];
+  const nx=nonX(),pct=Math.round(nx/ALL_MODS.length*100);
+  const legend=ACC.map(a=>`<span class="legend-item" style="background:${a.bg};color:${a.color}">${a.code} = ${a.label}</span>`).join("");
+  const ghtml=GROUPS.map(g=>{
+    const rows=g.mods.map(mod=>{
+      const sel=S.permisos[mod]||"X",ac=ACC.find(a=>a.code===sel);
+      const btns=ACC.map(a=>{const act=sel===a.code;return `<button class="acc-btn ab" data-m="${mod}" data-c="${a.code}" style="${act?`background:${a.bg};color:${a.color};border-color:${a.color}`:""}">${a.code}</button>`;}).join("");
+      return `<div class="mod-row" data-mod="${mod}">
+        <span class="mod-name">${mod}<span class="badge" data-badge="${mod}" style="background:${ac.bg};color:${ac.color}">${sel}</span></span>
+        <div class="acc-grp">${btns}</div></div>`;
+    }).join("");
+    return `<div class="grp-title">${g.name}</div>${rows}`;
+  }).join("");
+  app().innerHTML=`${stepBar(3)}
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <strong style="font-size:15px">Permisos por módulo</strong>
+      <span class="ger-pill" style="background:${gc.bg};color:${gc.color}">${getCargo()}</span>
+    </div>
+    <p style="font-size:13px;color:#888;margin-bottom:1rem">Todo en <strong>X</strong> por defecto. Activa solo lo que este cargo necesita.</p>
+    <div class="legend">${legend}</div>
+    <div style="margin-bottom:1rem">
+      <div class="prog-meta"><span>Módulos habilitados</span><span id="plbl">${nx} / ${ALL_MODS.length}</span></div>
+      <div class="prog-track"><div class="prog-fill" id="pfill" style="width:${pct}%"></div></div>
+    </div>
+    ${ghtml}
+    <div class="nav">
+      <button id="btn-b3">← Atrás</button><button id="btn-n3" class="bp">Revisar →</button>
+    </div>`;
+  document.querySelectorAll(".ab").forEach(b=>b.addEventListener("click",()=>{
+    const mod=b.dataset.m,code=b.dataset.c,ac=ACC.find(a=>a.code===code);
+    S.permisos[mod]=code;
+    const badge=document.querySelector(`[data-badge="${mod}"]`);
+    if(badge){badge.style.background=ac.bg;badge.style.color=ac.color;badge.textContent=code;}
+    document.querySelectorAll(`.ab[data-m="${mod}"]`).forEach(btn=>{
+      const ba=ACC.find(a=>a.code===btn.dataset.c),act=btn.dataset.c===code;
+      btn.style.background=act?ba.bg:"#fff";btn.style.color=act?ba.color:"#aaa";btn.style.borderColor=act?ba.color:"#e0e0e0";
+    });
+    const nx=nonX(),pl=$("plbl"),pf=$("pfill");
+    if(pl)pl.textContent=`${nx} / ${ALL_MODS.length}`;
+    if(pf)pf.style.width=`${Math.round(nx/ALL_MODS.length*100)}%`;
+  }));
+  $("btn-b3").addEventListener("click",()=>{S.step=2;render();});
+  $("btn-n3").addEventListener("click",()=>{S.step=4;render();});
+}
+
+function r4(){
+  const gc=GD[S.gerencia],c=getCargo(),nx=nonX();
+  const hab=GROUPS.map(g=>{
+    const items=g.mods.filter(m=>S.permisos[m]&&S.permisos[m]!=="X");
+    if(!items.length)return "";
+    const badges=items.map(m=>{const a=ACC.find(x=>x.code===S.permisos[m]);return `<span class="badge" style="background:${a.bg};color:${a.color};margin:2px">${m}: ${a.code}</span>`;}).join("");
+    return `<div style="margin-bottom:10px"><div style="font-size:11px;color:#aaa;margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:.4px">${g.name}</div><div style="display:flex;flex-wrap:wrap">${badges}</div></div>`;
+  }).join("");
+  const usum=S.usuarios.length?S.usuarios.map(u=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <div style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:${gc.bg};color:${gc.color}">${u.nombre[0].toUpperCase()}</div>
+      <span style="font-size:13px;font-weight:600">${u.nombre}</span>
+      <span style="font-size:12px;color:#999">${u.correo}</span>
+    </div>`).join(""):`<div style="font-size:13px;color:#bbb">Sin usuarios asociados</div>`;
+
+  app().innerHTML=`${stepBar(4)}
+    <strong style="font-size:15px;display:block;margin-bottom:1.25rem">Confirmar y guardar</strong>
+    <div class="sum-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="font-size:17px;font-weight:700">${c}</div>
+        <span class="ger-pill" style="background:${gc.bg};color:${gc.color}">Gerencia ${S.gerencia}</span>
+      </div>
+      ${S.obs?`<div style="font-size:12px;color:#888;padding:6px 10px;background:#fff;border-radius:6px;border:1px solid #eee;margin-top:4px">${S.obs}</div>`:""}
+    </div>
+    <div style="margin-bottom:1rem">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px">Usuarios (${S.usuarios.length})</div>${usum}
+    </div>
+    <div style="margin-bottom:1.25rem">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px">Accesos habilitados (${nx} de ${ALL_MODS.length})</div>
+      ${hab||`<div style="font-size:13px;color:#bbb;font-style:italic">Todos en Sin acceso</div>`}
+    </div>
+    <div style="font-size:13px;color:#166534;padding:10px 14px;background:#f0fdf4;border-radius:8px;margin-bottom:1rem;border:1px solid #bbf7d0">
+      Se guardará directamente en Google Sheets — hoja <strong>Roles ERP</strong>.
+    </div>
+    <div id="err-wrap"></div>
+    <div class="nav">
+      <button id="btn-b4">← Editar</button>
+      <button id="btn-save" class="bp">Guardar en Sheets →</button>
+    </div>`;
+  $("btn-b4").addEventListener("click",()=>{S.step=3;render();});
+  $("btn-save").addEventListener("click",async()=>{
+    const btn=$("btn-save"),ew=$("err-wrap");
+    btn.disabled=true;btn.textContent="Guardando...";
+    try{
+      const payload={
+        id:`rol-${Date.now()}`,
+        fecha:new Date().toLocaleDateString("es-SV"),
+        gerencia:S.gerencia,
+        cargo:getCargo(),
+        obs:S.obs||"",
+        usuarios:S.usuarios,
+        permisos:S.permisos
+      };
+      const res=await fetch(GAS_URL,{
+        method:"POST",
+        headers:{"Content-Type":"text/plain"}, // GAS necesita text/plain para evitar preflight
+        body:JSON.stringify(payload)
+      });
+      const data=await res.json();
+      if(data.success){S.saved=true;render();}
+      else throw new Error(data.error||"Error desconocido");
+    }catch(err){
+      ew.innerHTML=`<div class="err-box">Error al guardar: ${err.message}.<br>Verifica que el GAS_URL esté configurado y el script esté desplegado correctamente.</div>`;
+      btn.disabled=false;btn.textContent="Reintentar →";
+    }
+  });
+}
+
+render();
+</script>
+</body>
+</html>
